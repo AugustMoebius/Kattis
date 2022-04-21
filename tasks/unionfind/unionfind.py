@@ -12,16 +12,14 @@ def parse_row():
     is_operation = line_split[0] == "="
     return (is_operation, int(line_split[1]), int(line_split[2]))
 
-def find_idxs(x, y):
+def find_idxs(x, y):   
     x_idx = -1
     y_idx = -1
-    for idx, s in enumerate(sets):
-        if x in s:
-            x_idx = idx
-        if y in s:
-            y_idx = idx
-        if x_idx != -1 and y_idx != -1:
-            break
+    if (x in setIdx):
+        x_idx = setIdx[x]
+    if (y in setIdx):
+        y_idx = setIdx[y]
+
     return x_idx, y_idx
 
 def update_sets(x, y):
@@ -29,13 +27,19 @@ def update_sets(x, y):
     
     if x_idx == -1 and y_idx == -1:
         sets.append({x, y})
+        setIdx[x] = len(sets) - 1
+        setIdx[y] = len(sets) - 1
     elif y_idx == -1:
         sets[x_idx].add(y)
+        setIdx[y] = setIdx[x] 
     elif x_idx == -1:
         sets[y_idx].add(x)
+        setIdx[x] = setIdx[y]
     else:
         sets[x_idx] = sets[x_idx].union(sets[y_idx])
-        del sets[y_idx]
+        for item in sets[y_idx]: 
+            setIdx[item] = setIdx[x]
+        #del sets[y_idx]
 
 for _ in range(q):
     row = parse_row()
@@ -49,4 +53,3 @@ for _ in range(q):
             print("yes")
         else:
             print("no")
-
